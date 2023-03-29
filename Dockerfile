@@ -1,23 +1,24 @@
 # Base-Image
-FROM php:8.2-fpm
+FROM ubuntu:22.04
 
 # Install Packages
 RUN apt-get update && apt-get install -y \
     nginx \
+    php-fpm \
+    php-gd \
+    php-mysqli \
+    php-pdo \
+    php-zip \
+    php-opcache \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
+    curl \
     unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd mysqli zip opcache
-
-# Install Node.js 16
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-    && apt-get install -y nodejs
-
-#  Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y nodejs \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Nginx Config
 COPY nginx.conf /etc/nginx/nginx.conf
